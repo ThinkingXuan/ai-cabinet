@@ -30,6 +30,10 @@ def create_app(config_name='default'):
     from .controllers.auth import auth_bp
     app.register_blueprint(auth_bp, url_prefix='/ai-cabinet/api/auth')
     
+    # 注册衣物蓝图
+    from .controllers.clothes_controller import clothes_bp
+    app.register_blueprint(clothes_bp, url_prefix='/ai-cabinet/api/clothes')
+    
     # 注册全局错误处理
     register_error_handlers(app)
     

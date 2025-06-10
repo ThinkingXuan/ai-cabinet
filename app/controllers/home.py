@@ -16,6 +16,11 @@ def ai_cabinet():
         "documentation": "查看 README.md 获取API文档",
         "endpoints": {
             "register": "/ai-cabinet/api/auth/register",
-            "login": "/ai-cabinet/api/auth/login"
+            "login": "/ai-cabinet/api/auth/login",
+            "clothes": {
+                "list": "/ai-cabinet/api/clothes/",
+                "detail": "/ai-cabinet/api/clothes/{clothes_id}",
+                "upload": "/ai-cabinet/api/clothes/upload"
+            }
         }
     }) 
