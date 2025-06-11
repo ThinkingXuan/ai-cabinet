@@ -22,6 +22,9 @@ def create_app(config_name='default'):
     db.init_app(app)
     jwt.init_app(app)
     
+    # 注册JWT错误处理器
+    register_jwt_handlers(jwt)
+    
     # 添加根路由
     from .controllers.home import home_bp
     app.register_blueprint(home_bp, url_prefix='/ai-cabinet')
@@ -38,6 +41,50 @@ def create_app(config_name='default'):
     register_error_handlers(app)
     
     return app
+
+def register_jwt_handlers(jwt):
+    """
+    注册JWT错误处理器
+    :param jwt: JWT管理器实例
+    """
+    from .utils.response import error_response
+    
+    @jwt.expired_token_loader
+    def expired_token_callback(jwt_header, jwt_payload):
+        """处理令牌过期的情况"""
+        return error_response("令牌已过期，请重新登录", status_code=200)
+    
+    @jwt.invalid_token_loader
+    def invalid_token_callback(error_string):
+        """处理无效令牌的情况"""
+        return error_response("无效的令牌", status_code=200)
+    
+    @jwt.unauthorized_loader
+    def missing_token_callback(error_string):
+        """处理缺少令牌的情况"""
+        return error_response("缺少令牌", status_code=200)
+    
+    # 令牌黑名单检查回调
+    # 注意：此回调必须返回布尔值，而不是响应对象
+    # 返回True表示令牌在黑名单中（被禁用），返回False表示令牌不在黑名单中（可用）
+    @jwt.token_in_blocklist_loader
+    def token_in_blocklist_callback(jwt_header, jwt_payload):
+        """
+        检查令牌是否在黑名单中
+        目前我们没有实现令牌黑名单功能，所以始终返回False
+        如果需要实现令牌黑名单，可以在此处添加检查逻辑
+        """
+        return False  # 返回False表示令牌不在黑名单中
+    
+    @jwt.needs_fresh_token_loader
+    def needs_fresh_token_callback(jwt_header, jwt_payload):
+        """处理需要新令牌的情况"""
+        return error_response("需要新的令牌", status_code=200)
+    
+    @jwt.revoked_token_loader
+    def revoked_token_callback(jwt_header, jwt_payload):
+        """处理令牌被撤销的情况"""
+        return error_response("令牌已被撤销", status_code=200)
 
 def register_error_handlers(app):
     """
