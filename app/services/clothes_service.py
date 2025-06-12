@@ -63,13 +63,21 @@ class ClothesService:
                 # 删除已上传的文件
                 self.oss_helper.delete_object(object_key)
         
-        return {
-            "success": any(item["success"] for item in result),
-            "total": len(files),
-            "success_count": sum(1 for item in result if item["success"]),
-            "failed_count": sum(1 for item in result if not item["success"]),
-            "items": result
-        }
+        if any(item["success"] for item in result):
+            return {
+                "success": True,
+                "items": {
+                    "total": len(files),
+                    "success_count": sum(1 for item in result if item["success"]),
+                    "failed_count": sum(1 for item in result if not item["success"]),
+                    "items": result
+                }
+            }
+        else:
+            return {
+                "success": False,
+                "message": "所有文件上传失败"
+            }
     
     def _create_clothes_with_ai_recognition(self, account_id, image_url):
         """

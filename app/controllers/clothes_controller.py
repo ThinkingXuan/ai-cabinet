@@ -6,6 +6,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from werkzeug.utils import secure_filename
 from app.services.clothes_service import ClothesService
 from config import Config
+from app.utils.response import success_response, error_response
 
 # 从配置中导入上传文件大小限制
 MAX_CONTENT_LENGTH = Config.MAX_CONTENT_LENGTH
@@ -27,10 +28,7 @@ def upload_clothes_images():
     
     # 检查是否有文件上传
     if 'files[]' not in request.files:
-        return jsonify({
-            'success': False,
-            'message': '没有上传文件'
-        }), 400
+        return error_response('没有上传文件', status_code=400)
     
     # 获取上传的文件列表
     files = request.files.getlist('files[]')
@@ -44,18 +42,15 @@ def upload_clothes_images():
     
     # 检查文件大小是否超过限制
     if total_size > MAX_CONTENT_LENGTH:
-        return jsonify({
-            'success': False,
-            'message': f'上传文件总大小不能超过{MAX_CONTENT_LENGTH / 1024 / 1024}MB'
-        }), 400
+        return error_response(f'上传文件总大小不能超过{MAX_CONTENT_LENGTH / 1024 / 1024}MB', status_code=400)
     
     # 上传文件
     result = clothes_service.upload_clothes_images(account_id, files)
     
     if result['success']:
-        return jsonify(result), 200
+        return success_response(result['items'], 200)
     else:
-        return jsonify(result), 400
+        return error_response(result['message'], status_code=400)
 
 @clothes_bp.route('/', methods=['GET'])
 @jwt_required()
@@ -75,13 +70,12 @@ def get_clothes_list():
     clothes_list = clothes_service.get_clothes_list(account_id, category, status, season)
     
     # 转换为字典列表
-    result = [clothes.to_dict() for clothes in clothes_list]
+    items = [clothes.to_dict() for clothes in clothes_list]
     
-    return jsonify({
-        'success': True,
-        'total': len(result),
-        'items': result
-    }), 200
+    return success_response({
+        'total': len(items),
+        'items': items
+    }, 200)
 
 @clothes_bp.route('/<int:clothes_id>', methods=['GET'])
 @jwt_required()
@@ -96,15 +90,9 @@ def get_clothes_by_id(clothes_id):
     clothes = clothes_service.get_clothes_by_id(account_id, clothes_id)
     
     if clothes:
-        return jsonify({
-            'success': True,
-            'data': clothes.to_dict()
-        }), 200
+        return success_response(clothes.to_dict(), 200)
     else:
-        return jsonify({
-            'success': False,
-            'message': '衣物不存在'
-        }), 404
+        return error_response('衣物不存在', status_code=404)
 
 @clothes_bp.route('/<int:clothes_id>', methods=['PUT'])
 @jwt_required()
@@ -119,10 +107,7 @@ def update_clothes(clothes_id):
     data = request.get_json()
     
     if not data:
-        return jsonify({
-            'success': False,
-            'message': '请求数据不能为空'
-        }), 400
+        return error_response('请求数据不能为空', status_code=400)
     
     # 提取更新字段
     name = data.get('name')
@@ -143,9 +128,9 @@ def update_clothes(clothes_id):
     )
     
     if result['success']:
-        return jsonify(result), 200
+        return success_response(result['data'], 200)
     else:
-        return jsonify(result), 400
+        return error_response(result['message'], status_code=400)
 
 @clothes_bp.route('/<int:clothes_id>/reanalyze', methods=['POST'])
 @jwt_required()
@@ -160,6 +145,6 @@ def reanalyze_clothes(clothes_id):
     result = clothes_service.reanalyze_clothes(account_id, clothes_id)
     
     if result['success']:
-        return jsonify(result), 200
+        return success_response(result['result'], 200)
     else:
-        return jsonify(result), 400 
+        return error_response(result['message'], status_code=400) 

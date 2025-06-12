@@ -249,44 +249,6 @@ python main.py
   }
   ```
 
-### 上传衣物图片
-
-- **URL**: `/ai-cabinet/api/clothes/upload`
-- **方法**: POST
-- **认证**: 需要JWT令牌（在请求头中添加 `Authorization: Bearer <token>`）
-- **请求参数**:
-  - `files[]` - 文件列表，可以包含多个文件
-- **成功响应** (200):
-  ```json
-  {
-    "success": true,
-    "total": 2,
-    "success_count": 2,
-    "failed_count": 0,
-    "items": [
-      {
-        "filename": "shirt.jpg",
-        "success": true,
-        "clothes_id": 1,
-        "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/clothes/user123/20230601/abc123.jpg"
-      },
-      {
-        "filename": "pants.jpg",
-        "success": true,
-        "clothes_id": 2,
-        "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/clothes/user123/20230601/def456.jpg"
-      }
-    ]
-  }
-  ```
-- **错误响应** (400):
-  ```json
-  {
-    "success": false,
-    "message": "没有上传文件"
-  }
-  ```
-
 ### 获取衣物列表
 
 - **URL**: `/ai-cabinet/api/clothes/`
@@ -300,33 +262,35 @@ python main.py
   ```json
   {
     "success": true,
-    "total": 2,
-    "items": [
-      {
-        "id": 1,
-        "account_id": "user123",
-        "name": "红色上衣",
-        "category": "上衣",
-        "color": "红色",
-        "season": ["spring", "autumn"],
-        "style": "休闲",
-        "status": "available",
-        "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/clothes/user123/20230601/abc123.jpg",
-        "created_at": "2023-06-01T12:34:56"
-      },
-      {
-        "id": 2,
-        "account_id": "user123",
-        "name": "蓝色裤子",
-        "category": "裤子",
-        "color": "蓝色",
-        "season": ["spring", "summer", "autumn"],
-        "style": "休闲",
-        "status": "available",
-        "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/clothes/user123/20230601/def456.jpg",
-        "created_at": "2023-06-01T12:35:00"
-      }
-    ]
+    "result": {
+      "total": 2,
+      "items": [
+        {
+          "id": 1,
+          "account_id": "user123",
+          "name": "红色上衣",
+          "category": "上衣",
+          "color": "红色",
+          "season": ["spring", "autumn"],
+          "style": "休闲",
+          "status": "available",
+          "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/clothes/user123/20230601/abc123.jpg",
+          "created_at": "2023-06-01T12:34:56"
+        },
+        {
+          "id": 2,
+          "account_id": "user123",
+          "name": "蓝色裤子",
+          "category": "裤子",
+          "color": "蓝色",
+          "season": ["spring", "summer", "autumn"],
+          "style": "休闲",
+          "status": "available",
+          "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/clothes/user123/20230601/def456.jpg",
+          "created_at": "2023-06-01T12:35:00"
+        }
+      ]
+    }
   }
   ```
 
@@ -339,7 +303,7 @@ python main.py
   ```json
   {
     "success": true,
-    "data": {
+    "result": {
       "id": 1,
       "account_id": "user123",
       "name": "红色上衣",
@@ -380,7 +344,7 @@ python main.py
   ```json
   {
     "success": true,
-    "data": {
+    "result": {
       "id": 1,
       "account_id": "user123",
       "name": "新名称",
@@ -431,6 +395,46 @@ python main.py
   {
     "success": false,
     "message": "AI识别失败: 错误信息"
+  }
+  ```
+
+### 上传衣物图片
+
+- **URL**: `/ai-cabinet/api/clothes/upload`
+- **方法**: POST
+- **认证**: 需要JWT令牌（在请求头中添加 `Authorization: Bearer <token>`）
+- **请求参数**:
+  - `files[]` - 文件列表，可以包含多个文件
+- **成功响应** (200):
+  ```json
+  {
+    "success": true,
+    "result": {
+      "total": 2,
+      "success_count": 2,
+      "failed_count": 0,
+      "items": [
+        {
+          "filename": "shirt.jpg",
+          "success": true,
+          "clothes_id": 1,
+          "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/clothes/user123/20230601/abc123.jpg"
+        },
+        {
+          "filename": "pants.jpg",
+          "success": true,
+          "clothes_id": 2,
+          "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/clothes/user123/20230601/def456.jpg"
+        }
+      ]
+    }
+  }
+  ```
+- **错误响应** (400):
+  ```json
+  {
+    "success": false,
+    "message": "没有上传文件"
   }
   ```
 
