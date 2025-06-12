@@ -145,4 +145,21 @@ def update_clothes(clothes_id):
     if result['success']:
         return jsonify(result), 200
     else:
+        return jsonify(result), 400
+
+@clothes_bp.route('/<int:clothes_id>/reanalyze', methods=['POST'])
+@jwt_required()
+def reanalyze_clothes(clothes_id):
+    """
+    重新AI识别衣物
+    """
+    # 获取当前用户的account_id
+    account_id = get_jwt_identity()
+    
+    # 调用服务重新识别衣物
+    result = clothes_service.reanalyze_clothes(account_id, clothes_id)
+    
+    if result['success']:
+        return jsonify(result), 200
+    else:
         return jsonify(result), 400 

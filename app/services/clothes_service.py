@@ -269,4 +269,63 @@ class ClothesService:
             return {
                 "success": False,
                 "message": f"更新衣物失败: {str(e)}"
+            }
+    
+    def reanalyze_clothes(self, account_id, clothes_id):
+        """
+        重新使用AI识别衣物
+        :param account_id: 用户账号ID
+        :param clothes_id: 衣物ID
+        :return: AI识别结果字典
+        """
+        # 查询衣物
+        clothes = self.get_clothes_by_id(account_id, clothes_id)
+        
+        if not clothes:
+            return {
+                "success": False,
+                "message": "衣物不存在"
+            }
+        
+        # 检查衣物是否有图片URL
+        if not clothes.image_url:
+            return {
+                "success": False,
+                "message": "衣物没有图片，无法进行AI识别"
+            }
+        
+        try:
+            # 调用AI服务识别图片
+            ai_result = self.ai_service.analyze_clothing_image(clothes.image_url)
+            
+            if ai_result["success"]:
+                # 从AI识别结果中提取信息
+                data = ai_result["data"]
+                confidence = data.get("confidence", 0)
+                
+                # 更新AI识别信息记录
+                ai_info = self._create_ai_info(account_id, clothes_id, data, confidence)
+                
+                # 返回AI识别结果，但不更新clothes表
+                return {
+                    "success": True,
+                    "result": {
+                        "message": "AI识别成功",
+                        "ai_result": data,
+                        "clothes_id": clothes_id,
+                        "image_url": clothes.image_url
+                    }
+                }
+            else:
+                return {
+                    "success": False,
+                    "message": f"AI识别失败: {ai_result['message']}",
+                    "raw_response": ai_result.get("raw_response")
+                }
+                
+        except Exception as e:
+            print(f"重新识别衣物失败: {str(e)}")
+            return {
+                "success": False,
+                "message": f"重新识别衣物失败: {str(e)}"
             } 

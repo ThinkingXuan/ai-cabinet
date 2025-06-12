@@ -402,6 +402,38 @@ python main.py
   }
   ```
 
+### 重新AI识别衣物
+
+- **URL**: `/ai-cabinet/api/clothes/{clothes_id}/reanalyze`
+- **方法**: POST
+- **认证**: 需要JWT令牌（在请求头中添加 `Authorization: Bearer <token>`）
+- **请求体**: 无需请求体
+- **成功响应** (200):
+  ```json
+  {
+    "success": true,
+    "result": {
+      "message": "AI识别成功",
+      "ai_result": {
+        "category": "上衣",
+        "color": "蓝色",
+        "season": "spring,summer",
+        "style": "休闲",
+        "confidence": 95
+      },
+      "clothes_id": 1,
+      "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/clothes/user123/20230601/abc123.jpg"
+    }
+  }
+  ```
+- **错误响应** (400):
+  ```json
+  {
+    "success": false,
+    "message": "AI识别失败: 错误信息"
+  }
+  ```
+
 ## 安全说明
 
 系统使用JWT（JSON Web Token）进行认证，具有以下特点：
