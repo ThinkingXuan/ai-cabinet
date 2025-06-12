@@ -20,7 +20,8 @@ def ai_cabinet():
             "clothes": {
                 "list": "/ai-cabinet/api/clothes/",
                 "detail": "/ai-cabinet/api/clothes/{clothes_id}",
-                "upload": "/ai-cabinet/api/clothes/upload"
+                "upload": "/ai-cabinet/api/clothes/upload",
+                "update": "/ai-cabinet/api/clothes/{clothes_id}"
             }
         }
     }) 

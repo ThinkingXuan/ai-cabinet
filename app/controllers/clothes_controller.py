@@ -104,4 +104,45 @@ def get_clothes_by_id(clothes_id):
         return jsonify({
             'success': False,
             'message': '衣物不存在'
-        }), 404 
+        }), 404
+
+@clothes_bp.route('/<int:clothes_id>', methods=['PUT'])
+@jwt_required()
+def update_clothes(clothes_id):
+    """
+    更新衣物信息
+    """
+    # 获取当前用户的account_id
+    account_id = get_jwt_identity()
+    
+    # 获取请求数据
+    data = request.get_json()
+    
+    if not data:
+        return jsonify({
+            'success': False,
+            'message': '请求数据不能为空'
+        }), 400
+    
+    # 提取更新字段
+    name = data.get('name')
+    category = data.get('category')
+    color = data.get('color')
+    season = data.get('season')
+    style = data.get('style')
+    
+    # 更新衣物
+    result = clothes_service.update_clothes(
+        account_id=account_id,
+        clothes_id=clothes_id,
+        name=name,
+        category=category,
+        color=color,
+        season=season,
+        style=style
+    )
+    
+    if result['success']:
+        return jsonify(result), 200
+    else:
+        return jsonify(result), 400 

@@ -13,7 +13,7 @@
 - 全局唯一账户ID
 - 参数验证
 - 模块化设计
-- 标准化JSON响应格式
+- 标准化JSON响应格式g
 - 衣物图片上传功能（支持多图片上传）
 - 阿里云OSS对象存储集成
 
@@ -358,6 +358,47 @@ python main.py
   {
     "success": false,
     "message": "衣物不存在"
+  }
+  ```
+
+### 更新衣物信息
+
+- **URL**: `/ai-cabinet/api/clothes/{clothes_id}`
+- **方法**: PUT
+- **认证**: 需要JWT令牌（在请求头中添加 `Authorization: Bearer <token>`）
+- **请求体**:
+  ```json
+  {
+    "name": "新名称",  // 可选字段
+    "category": "新分类",  // 可选字段
+    "color": "新颜色",  // 可选字段
+    "season": "spring,summer",  // 可选字段，用逗号分隔的季节列表
+    "style": "新风格"  // 可选字段
+  }
+  ```
+- **成功响应** (200):
+  ```json
+  {
+    "success": true,
+    "data": {
+      "id": 1,
+      "account_id": "user123",
+      "name": "新名称",
+      "category": "新分类",
+      "color": "新颜色",
+      "season": ["spring", "summer"],
+      "style": "新风格",
+      "status": "available",
+      "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/clothes/user123/20230601/abc123.jpg",
+      "created_at": "2023-06-01T12:34:56"
+    }
+  }
+  ```
+- **错误响应** (400):
+  ```json
+  {
+    "success": false,
+    "message": "更新衣物失败: 错误信息"
   }
   ```
 
