@@ -12,3 +12,4 @@ gunicorn==22.0.0
 Werkzeug==3.0.6
 openai==1.86.0
 requests==2.31.0
+alibabacloud-oss-v2
