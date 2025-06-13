@@ -28,7 +28,7 @@ def upload_clothes_images():
     
     # 检查是否有文件上传
     if 'files[]' not in request.files:
-        return error_response('没有上传文件', status_code=400)
+        return error_response('没有上传文件', status_code=200)
     
     # 获取上传的文件列表
     files = request.files.getlist('files[]')
@@ -50,7 +50,7 @@ def upload_clothes_images():
     if result['success']:
         return success_response(result['items'], 200)
     else:
-        return error_response(result['message'], status_code=400)
+        return error_response(result['message'], status_code=200)
 
 @clothes_bp.route('/', methods=['GET'])
 @jwt_required()
@@ -92,7 +92,7 @@ def get_clothes_by_id(clothes_id):
     if clothes:
         return success_response(clothes.to_dict(), 200)
     else:
-        return error_response('衣物不存在', status_code=404)
+        return error_response('衣物不存在', status_code=200)
 
 @clothes_bp.route('/<int:clothes_id>', methods=['PUT'])
 @jwt_required()
@@ -107,7 +107,7 @@ def update_clothes(clothes_id):
     data = request.get_json()
     
     if not data:
-        return error_response('请求数据不能为空', status_code=400)
+        return error_response('请求数据不能为空', status_code=200)
     
     # 提取更新字段
     name = data.get('name')
@@ -130,7 +130,7 @@ def update_clothes(clothes_id):
     if result['success']:
         return success_response(result['data'], 200)
     else:
-        return error_response(result['message'], status_code=400)
+        return error_response(result['message'], status_code=200)
 
 @clothes_bp.route('/<int:clothes_id>/reanalyze', methods=['POST'])
 @jwt_required()
@@ -147,4 +147,21 @@ def reanalyze_clothes(clothes_id):
     if result['success']:
         return success_response(result['result'], 200)
     else:
-        return error_response(result['message'], status_code=400) 
+        return error_response(result['message'], status_code=200)
+
+@clothes_bp.route('/<int:clothes_id>', methods=['DELETE'])
+@jwt_required()
+def delete_clothes(clothes_id):
+    """
+    删除衣物
+    """
+    # 获取当前用户的account_id
+    account_id = get_jwt_identity()
+    
+    # 调用服务删除衣物
+    result = clothes_service.delete_clothes(account_id, clothes_id)
+    
+    if result['success']:
+        return success_response(result['result'], 200)
+    else:
+        return error_response(result['message'], status_code=200) 

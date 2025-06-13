@@ -336,4 +336,41 @@ class ClothesService:
             return {
                 "success": False,
                 "message": f"重新识别衣物失败: {str(e)}"
+            }
+    
+    def delete_clothes(self, account_id, clothes_id):
+        """
+        删除衣物（只从数据库中删除，不删除OSS中的图片）
+        :param account_id: 用户账号ID
+        :param clothes_id: 衣物ID
+        :return: 删除结果字典
+        """
+        # 查询衣物
+        clothes = self.get_clothes_by_id(account_id, clothes_id)
+        
+        if not clothes:
+            return {
+                "success": False,
+                "message": "衣物不存在"
+            }
+        
+        try:
+            # 从数据库中删除衣物
+            db.session.delete(clothes)
+            db.session.commit()
+            
+            return {
+                "success": True,
+                "result": {
+                    "message": "衣物删除成功",
+                    "clothes_id": clothes_id
+                }
+            }
+            
+        except Exception as e:
+            db.session.rollback()
+            print(f"删除衣物失败: {str(e)}")
+            return {
+                "success": False,
+                "message": f"删除衣物失败: {str(e)}"
             } 

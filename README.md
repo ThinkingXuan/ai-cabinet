@@ -317,7 +317,7 @@ python main.py
     }
   }
   ```
-- **错误响应** (404):
+- **错误响应** (200):
   ```json
   {
     "success": false,
@@ -358,7 +358,7 @@ python main.py
     }
   }
   ```
-- **错误响应** (400):
+- **错误响应** (200):
   ```json
   {
     "success": false,
@@ -390,11 +390,36 @@ python main.py
     }
   }
   ```
-- **错误响应** (400):
+- **错误响应** (200):
   ```json
   {
     "success": false,
     "message": "AI识别失败: 错误信息"
+  }
+  ```
+
+### 删除衣物
+
+- **URL**: `/ai-cabinet/api/clothes/{clothes_id}`
+- **方法**: DELETE
+- **认证**: 需要JWT令牌（在请求头中添加 `Authorization: Bearer <token>`）
+- **请求体**: 无需请求体
+- **说明**: 此接口只从数据库中删除衣物记录，不会删除OSS中的图片文件
+<!-- - **成功响应** (200): -->
+  ```json
+  {
+    "success": true,
+    "result": {
+      "message": "衣物删除成功",
+      "clothes_id": 1
+    }
+  }
+  ```
+- **错误响应** (200):
+  ```json
+  {
+    "success": false,
+    "message": "删除衣物失败: 错误信息"
   }
   ```
 
@@ -430,7 +455,7 @@ python main.py
     }
   }
   ```
-- **错误响应** (400):
+- **错误响应** (200):
   ```json
   {
     "success": false,

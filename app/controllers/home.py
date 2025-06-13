@@ -22,6 +22,7 @@ def ai_cabinet():
                 "detail": "/ai-cabinet/api/clothes/{clothes_id}",
                 "upload": "/ai-cabinet/api/clothes/upload",
                 "update": "/ai-cabinet/api/clothes/{clothes_id}",
+                "delete": "/ai-cabinet/api/clothes/{clothes_id}",
                 "reanalyze": "/ai-cabinet/api/clothes/{clothes_id}/reanalyze"
             }
         }
