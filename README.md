@@ -10,10 +10,11 @@
 - JWT认证（使用全局唯一账户ID作为身份标识）
 - 用户注册和登录功能
 - 用户资料管理（性别、出生日期）
+- 用户身材信息管理（头像、身高、体重、身材类型等）
 - 全局唯一账户ID
 - 参数验证
 - 模块化设计
-- 标准化JSON响应格式g
+- 标准化JSON响应格式
 - 衣物图片上传功能（支持多图片上传）
 - 阿里云OSS对象存储集成
 
@@ -25,6 +26,7 @@
 │   ├── __init__.py
 │   ├── models/
 │   │   ├── user.py
+│   │   ├── user_body_info.py
 │   │   ├── clothes.py
 │   │   ├── tag.py
 │   │   ├── clothes_tag.py
@@ -36,12 +38,15 @@
 │   ├── controllers/
 │   │   ├── auth.py
 │   │   ├── home.py
-│   │   └── clothes_controller.py
+│   │   ├── clothes_controller.py
+│   │   └── user_body_controller.py
 │   ├── services/
 │   │   ├── user_service.py
+│   │   ├── user_body_service.py
 │   │   └── clothes_service.py
 │   ├── schemas/
-│   │   └── user.py
+│   │   ├── user.py
+│   │   └── user_body.py
 │   └── utils/
 │       ├── __init__.py
 │       ├── response.py
@@ -128,6 +133,11 @@ python main.py
           "list": "/ai-cabinet/api/clothes/",
           "detail": "/ai-cabinet/api/clothes/{clothes_id}",
           "upload": "/ai-cabinet/api/clothes/upload"
+        },
+        "user_body": {
+          "info": "/ai-cabinet/api/user/body",
+          "avatar": "/ai-cabinet/api/user/body/avatar",
+          "avatar_upload": "/ai-cabinet/api/user/body/avatar/upload"
         }
       }
     }
@@ -405,7 +415,6 @@ python main.py
 - **认证**: 需要JWT令牌（在请求头中添加 `Authorization: Bearer <token>`）
 - **请求体**: 无需请求体
 - **说明**: 此接口只从数据库中删除衣物记录，不会删除OSS中的图片文件
-<!-- - **成功响应** (200): -->
   ```json
   {
     "success": true,
@@ -420,6 +429,138 @@ python main.py
   {
     "success": false,
     "message": "删除衣物失败: 错误信息"
+  }
+  ```
+
+### 获取用户身材信息
+
+- **URL**: `/ai-cabinet/api/user/body`
+- **方法**: GET
+- **认证**: 需要JWT令牌（在请求头中添加 `Authorization: Bearer <token>`）
+- **成功响应** (200):
+  ```json
+  {
+    "success": true,
+    "result": {
+      "id": 1,
+      "account_id": "550e8400-e29b-41d4-a716-446655440000",
+      "avatar_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/avatars/user123/avatar.jpg",
+      "height": 175.5,
+      "weight": 65.0,
+      "upper_body_length": 70.0,
+      "lower_body_length": 100.0,
+      "body_shape": "梨形",
+      "created_at": "2024-01-01T00:00:00",
+      "updated_at": "2024-01-01T00:00:00"
+    }
+  }
+  ```
+- **错误响应** (200):
+  ```json
+  {
+    "success": false,
+    "message": "未找到用户身材信息"
+  }
+  ```
+
+### 创建或更新用户身材信息
+
+- **URL**: `/ai-cabinet/api/user/body`
+- **方法**: POST 或 PUT
+- **认证**: 需要JWT令牌（在请求头中添加 `Authorization: Bearer <token>`）
+- **请求体**:
+  ```json
+  {
+    "avatar_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/avatars/user123/avatar.jpg",  // 可选字段
+    "height": 175.5,  // 可选字段，单位cm
+    "weight": 65.0,  // 可选字段，单位kg
+    "upper_body_length": 70.0,  // 可选字段，单位cm
+    "lower_body_length": 100.0,  // 可选字段，单位cm
+    "body_shape": "梨形"  // 可选字段，可选值: 梨形、苹果型、长方形、沙漏型、倒三角形
+  }
+  ```
+- **成功响应** (200):
+  ```json
+  {
+    "success": true,
+    "result": {
+      "id": 1,
+      "account_id": "550e8400-e29b-41d4-a716-446655440000",
+      "avatar_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/avatars/user123/avatar.jpg",
+      "height": 175.5,
+      "weight": 65.0,
+      "upper_body_length": 70.0,
+      "lower_body_length": 100.0,
+      "body_shape": "梨形",
+      "created_at": "2024-01-01T00:00:00",
+      "updated_at": "2024-01-01T00:00:00"
+    }
+  }
+  ```
+- **错误响应** (200):
+  ```json
+  {
+    "success": false,
+    "message": "验证错误",
+    "errors": {
+      "height": ["身高必须大于0且不超过300cm"]
+    }
+  }
+  ```
+
+### 上传用户头像文件
+
+- **URL**: `/ai-cabinet/api/user/body/avatar/upload`
+- **方法**: POST
+- **认证**: 需要JWT令牌（在请求头中添加 `Authorization: Bearer <token>`）
+- **请求参数**:
+  - `avatar` - 头像文件（表单字段名）
+- **成功响应** (200):
+  ```json
+  {
+    "success": true,
+    "result": {
+      "id": 1,
+      "account_id": "550e8400-e29b-41d4-a716-446655440000",
+      "avatar_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/avatar/user123/20240601/abc123.jpg",
+      "height": 175.5,
+      "weight": 65.0,
+      "upper_body_length": 70.0,
+      "lower_body_length": 100.0,
+      "body_shape": "梨形",
+      "created_at": "2024-01-01T00:00:00",
+      "updated_at": "2024-01-01T00:00:00"
+    }
+  }
+  ```
+- **错误响应** (200):
+  ```json
+  {
+    "success": false,
+    "message": "没有上传头像文件"
+  }
+  ```
+
+### 删除用户身材信息
+
+- **URL**: `/ai-cabinet/api/user/body`
+- **方法**: DELETE
+- **认证**: 需要JWT令牌（在请求头中添加 `Authorization: Bearer <token>`）
+- **请求体**: 无需请求体
+- **成功响应** (200):
+  ```json
+  {
+    "success": true,
+    "result": {
+      "message": "用户身材信息已删除"
+    }
+  }
+  ```
+- **错误响应** (200):
+  ```json
+  {
+    "success": false,
+    "message": "未找到用户身材信息"
   }
   ```
 
@@ -520,42 +661,3 @@ OSS_ENDPOINT = os.getenv('OSS_ENDPOINT', f"https://oss-{OSS_REGION}.aliyuncs.com
 OSS_URL_EXPIRATION = 3600  # 签名URL有效期（秒）
 OSS_PUBLIC_URL_BASE = f"https://{OSS_BUCKET_NAME}.{OSS_ENDPOINT.replace('https://', '')}"
 ```
-
-## 部署说明
-
-项目提供了两个部署脚本：
-
-1. `deploy_aws_minimal.sh` - 使用systemd管理服务的最小化部署方案
-2. `deploy_no_systemd.sh` - 不使用systemd的极简部署方案（资源占用更少）
-
-## 开发说明
-
-1. 项目使用 Flask-SQLAlchemy 作为 ORM 工具
-2. 使用 Flask-JWT-Extended 处理用户认证
-3. 使用 Marshmallow 进行数据验证和序列化
-4. 使用 alibabacloud-oss-v2 SDK 处理阿里云OSS存储
-5. 所有配置项都集中在 `config.py` 文件中管理
-6. 使用统一的响应格式工具函数 `success_response` 和 `error_response`
-
-## 测试说明
-
-项目提供了测试脚本`tests/test_upload_clothes.py`，可以用来测试衣物图片上传功能。
-
-使用方法：
-
-1. 确保已经配置好阿里云OSS参数
-2. 确保已经创建了测试用户
-3. 准备一张测试图片，放在`tests/test_image.jpg`
-4. 运行测试脚本：
-
-```bash
-python tests/test_upload_clothes.py
-```
-
-## 注意事项
-
-1. 使用前需要先创建阿里云OSS Bucket，并设置正确的权限
-2. 如果需要公开访问图片，需要设置Bucket的访问权限为公共读
-3. 如果不希望公开访问图片，可以使用签名URL，通过`OSSHelper.get_signed_url()`方法获取
-4. 上传大文件时可能需要调整`MAX_CONTENT_LENGTH`参数
-5. 生产环境中应该使用HTTPS协议保证数据传输安全

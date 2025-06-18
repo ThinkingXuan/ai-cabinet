@@ -47,27 +47,29 @@ class OSSHelper:
         return '.' in filename and \
                filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-    def generate_object_key(self, account_id, filename):
+    def generate_object_key(self, account_id, filename, file_type='clothes'):
         """
         生成OSS对象键名
         :param account_id: 用户账号ID
         :param filename: 原始文件名
+        :param file_type: 文件类型，默认为clothes，可选avatar
         :return: 对象键名
         """
         # 获取文件扩展名
         ext = filename.rsplit('.', 1)[1].lower() if '.' in filename else ''
         
-        # 生成唯一文件名：用户ID/年月日/随机UUID.扩展名
+        # 生成唯一文件名：文件类型/用户ID/年月日/随机UUID.扩展名
         today = datetime.now().strftime('%Y%m%d')
         unique_id = str(uuid.uuid4()).replace('-', '')
         
-        return f"clothes/{account_id}/{today}/{unique_id}.{ext}"
+        return f"{file_type}/{account_id}/{today}/{unique_id}.{ext}"
 
-    def upload_file(self, account_id, file_storage):
+    def upload_file(self, account_id, file_storage, file_type='clothes'):
         """
         上传文件到OSS
         :param account_id: 用户账号ID
         :param file_storage: Flask FileStorage对象
+        :param file_type: 文件类型，默认为clothes，可选avatar
         :return: 成功返回对象键名，失败返回None
         """
         if not file_storage or not self.allowed_file(file_storage.filename):
@@ -75,7 +77,7 @@ class OSSHelper:
         
         try:
             # 生成对象键名
-            object_key = self.generate_object_key(account_id, file_storage.filename)
+            object_key = self.generate_object_key(account_id, file_storage.filename, file_type)
             
             # 上传文件
             result = self.client.put_object(oss.PutObjectRequest(

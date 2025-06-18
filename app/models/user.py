@@ -2,6 +2,7 @@ from datetime import datetime
 import bcrypt
 import uuid
 from app import db
+from app.models.user_body_info import UserBodyInfo
 
 class User(db.Model):
     """用户模型"""
@@ -107,6 +108,13 @@ class User(db.Model):
             return None
         return cls.query.filter_by(email=email).first()
     
+    def get_body_info(self):
+        """
+        获取用户的身材信息
+        :return: 用户身材信息对象或None
+        """
+        return UserBodyInfo.get_by_account_id(self.account_id)
+            
     def to_dict(self):
         """
         将用户对象转换为字典

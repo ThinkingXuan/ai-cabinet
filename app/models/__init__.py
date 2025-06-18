@@ -7,4 +7,5 @@ from app.models.outfit import Outfit
 from app.models.recommendation import Recommendation
 from app.models.weather_log import WeatherLog
 from app.models.clothes_ai_info import ClothesAiInfo
-from app.models.shared_wardrobe import SharedWardrobe 
+from app.models.shared_wardrobe import SharedWardrobe
+from app.models.user_body_info import UserBodyInfo 

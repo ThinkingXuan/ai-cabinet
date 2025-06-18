@@ -105,3 +105,18 @@ CREATE TABLE shared_wardrobes (
     INDEX (account_id),
     INDEX (shared_with_account_id)
 ) COMMENT='衣柜共享关系表';
+
+-- 用户身材表：与用户表通过account_id关联
+CREATE TABLE user_body_info (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '身材信息ID',
+    account_id VARCHAR(64) NOT NULL UNIQUE COMMENT '关联的账号ID',
+    avatar_url VARCHAR(255) COMMENT '用户头像URL',
+    height DECIMAL(5,2) COMMENT '身高(cm)',
+    weight DECIMAL(5,2) COMMENT '体重(kg)',
+    upper_body_length DECIMAL(5,2) COMMENT '上身长度(cm)',
+    lower_body_length DECIMAL(5,2) COMMENT '下身长度(cm)',
+    body_shape VARCHAR(50) COMMENT '身材类型，如梨形、苹果型等',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    INDEX (account_id)
+) COMMENT='用户身材信息表';
