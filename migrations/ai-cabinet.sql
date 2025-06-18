@@ -46,14 +46,20 @@ CREATE TABLE clothes_tags (
     INDEX (account_id)
 ) COMMENT='衣物与标签的关联表';
 
+
+
 -- 穿搭记录：一个搭配包含多件衣物
 CREATE TABLE outfits (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '搭配ID',
-    account_id VARCHAR(64) NOT NULL COMMENT '所属账号',
-    name VARCHAR(100) COMMENT '搭配名称',
-    clothes_ids TEXT COMMENT '搭配的衣物ID列表（JSON数组）',
-    image_url VARCHAR(255) COMMENT '搭配展示图',
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+	id BIGINT PRIMARY KEY AUTO_INCREMENT COMMENT '搭配ID', 
+	account_id VARCHAR(64) NOT NULL COMMENT '所属账号', 
+	name VARCHAR(100) COMMENT '搭配名称', 
+	description TEXT COMMENT '搭配描述', 
+	style VARCHAR(50) COMMENT '风格', 
+	season VARCHAR(50) COMMENT '适合季节', 
+	occasion VARCHAR(50) COMMENT '适合场合', 
+	clothes_items TEXT COMMENT '包含的衣物ID列表（JSON数组）', 
+	image_url VARCHAR(255) COMMENT '搭配展示图', 
+	created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     INDEX (account_id)
 ) COMMENT='穿搭记录表';
 

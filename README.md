@@ -564,6 +564,149 @@ python main.py
   }
   ```
 
+### 创建穿搭
+
+- **URL**: `/ai-cabinet/api/outfit`
+- **方法**: POST
+- **认证**: 需要JWT令牌（在请求头中添加 `Authorization: Bearer <token>`）
+- **请求体**:
+  ```json
+  {
+    "name": "休闲穿搭",
+    "clothes_items": [1, 2, 3],  // 衣物ID列表
+    "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/outfits/user123/outfit1.jpg",  // 可选
+    "description": "适合周末逛街的休闲穿搭",  // 可选
+    "style": "休闲",  // 可选
+    "season": "春秋",  // 可选
+    "occasion": "日常"  // 可选
+  }
+  ```
+- **成功响应** (200):
+  ```json
+  {
+    "success": true,
+    "result": {
+      "id": 1,
+      "account_id": "550e8400-e29b-41d4-a716-446655440000",
+      "name": "休闲穿搭",
+      "clothes_items": [1, 2, 3],
+      "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/outfits/user123/outfit1.jpg",
+      "description": "适合周末逛街的休闲穿搭",
+      "style": "休闲",
+      "season": "春秋",
+      "occasion": "日常",
+      "created_at": "2024-01-01T00:00:00"
+    }
+  }
+  ```
+- **错误响应** (200):
+  ```json
+  {
+    "success": false,
+    "message": "验证错误",
+    "errors": {
+      "clothes_items": ["穿搭必须包含至少一件衣物"]
+    }
+  }
+  ```
+
+### 获取穿搭列表
+
+- **URL**: `/ai-cabinet/api/outfit`
+- **方法**: GET
+- **认证**: 需要JWT令牌（在请求头中添加 `Authorization: Bearer <token>`）
+- **查询参数**:
+  - `style` - 可选，按风格筛选
+  - `season` - 可选，按季节筛选
+  - `occasion` - 可选，按场合筛选
+- **成功响应** (200):
+  ```json
+  {
+    "success": true,
+    "result": [
+      {
+        "id": 1,
+        "account_id": "550e8400-e29b-41d4-a716-446655440000",
+        "name": "休闲穿搭",
+        "clothes_items": [1, 2, 3],
+        "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/outfits/user123/outfit1.jpg",
+        "description": "适合周末逛街的休闲穿搭",
+        "style": "休闲",
+        "season": "春秋",
+        "occasion": "日常",
+        "created_at": "2024-01-01T00:00:00"
+      },
+      {
+        "id": 2,
+        "account_id": "550e8400-e29b-41d4-a716-446655440000",
+        "name": "正式场合穿搭",
+        "clothes_items": [4, 5, 6],
+        "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/outfits/user123/outfit2.jpg",
+        "description": "适合工作场合的正式穿搭",
+        "style": "正式",
+        "season": "四季",
+        "occasion": "工作",
+        "created_at": "2024-01-02T00:00:00"
+      }
+    ]
+  }
+  ```
+
+### 获取穿搭详情
+
+- **URL**: `/ai-cabinet/api/outfit/{outfit_id}`
+- **方法**: GET
+- **认证**: 需要JWT令牌（在请求头中添加 `Authorization: Bearer <token>`）
+- **成功响应** (200):
+  ```json
+  {
+    "success": true,
+    "result": {
+      "id": 1,
+      "account_id": "550e8400-e29b-41d4-a716-446655440000",
+      "name": "休闲穿搭",
+      "clothes_items": [1, 2, 3],
+      "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/outfits/user123/outfit1.jpg",
+      "description": "适合周末逛街的休闲穿搭",
+      "style": "休闲",
+      "season": "春秋",
+      "occasion": "日常",
+      "created_at": "2024-01-01T00:00:00"
+    }
+  }
+  ```
+- **错误响应** (200):
+  ```json
+  {
+    "success": false,
+    "message": "穿搭不存在"
+  }
+  ```
+
+### 删除穿搭
+
+- **URL**: `/ai-cabinet/api/outfit/{outfit_id}`
+- **方法**: DELETE
+- **认证**: 需要JWT令牌（在请求头中添加 `Authorization: Bearer <token>`）
+- **请求体**: 无需请求体
+- **成功响应** (200):
+  ```json
+  {
+    "success": true,
+    "result": {
+      "id": 1,
+      "deleted": true
+    }
+  }
+  ```
+- **错误响应** (200):
+  ```json
+  {
+    "success": false,
+    "message": "穿搭不存在"
+  }
+  ```
+
 ### 上传衣物图片
 
 - **URL**: `/ai-cabinet/api/clothes/upload`

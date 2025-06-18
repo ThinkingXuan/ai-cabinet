@@ -24,6 +24,17 @@ def ai_cabinet():
                 "update": "/ai-cabinet/api/clothes/{clothes_id}",
                 "delete": "/ai-cabinet/api/clothes/{clothes_id}",
                 "reanalyze": "/ai-cabinet/api/clothes/{clothes_id}/reanalyze"
+            },
+            "outfit": {
+                "list": "/ai-cabinet/api/outfit/",
+                "detail": "/ai-cabinet/api/outfit/{outfit_id}",
+                "create": "/ai-cabinet/api/outfit/",
+                "delete": "/ai-cabinet/api/outfit/{outfit_id}"
+            },
+            "user_body": {
+                "get": "/ai-cabinet/api/user/body",
+                "update": "/ai-cabinet/api/user/body",
+                "avatar": "/ai-cabinet/api/user/body/avatar"
             }
         }
     }) 

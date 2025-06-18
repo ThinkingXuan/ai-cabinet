@@ -41,6 +41,10 @@ def create_app(config_name='default'):
     from .controllers.user_body_controller import user_body_bp
     app.register_blueprint(user_body_bp, url_prefix='/ai-cabinet/api/user/body')
     
+    # 注册穿搭蓝图
+    from .controllers.outfit_controller import outfit_bp
+    app.register_blueprint(outfit_bp, url_prefix='/ai-cabinet/api/outfit')
+    
     # 注册全局错误处理
     register_error_handlers(app)
     

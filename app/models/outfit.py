@@ -17,11 +17,15 @@ class Outfit(db.Model):
     image_url = db.Column(db.String(255), nullable=True, comment='穿搭图片URL')
     created_at = db.Column(db.DateTime, default=datetime.utcnow, comment='创建时间')
 
-    def __init__(self, account_id, name=None, clothes_items=None, image_url=None):
+    def __init__(self, account_id, name=None, clothes_items=None, image_url=None, description=None, style=None, season=None, occasion=None):
         self.account_id = account_id
         self.name = name
         self.set_clothes_items(clothes_items or [])
         self.image_url = image_url
+        self.description = description
+        self.style = style
+        self.season = season
+        self.occasion = occasion
     
     def get_clothes_items(self):
         """
@@ -100,6 +104,10 @@ class Outfit(db.Model):
             'id': self.id,
             'account_id': self.account_id,
             'name': self.name,
+            'description': self.description,
+            'style': self.style,
+            'season': self.season,
+            'occasion': self.occasion,
             'clothes_items': self.get_clothes_items(),
             'image_url': self.image_url,
             'created_at': self.created_at.isoformat()
