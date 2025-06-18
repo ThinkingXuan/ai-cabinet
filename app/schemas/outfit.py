@@ -37,4 +37,13 @@ class OutfitFilterSchema(Schema):
     """穿搭过滤的schema"""
     style = fields.Str(allow_none=True)
     season = fields.Str(allow_none=True)
-    occasion = fields.Str(allow_none=True) 
+    occasion = fields.Str(allow_none=True)
+
+class OutfitAIRequestSchema(Schema):
+    """AI穿搭请求的schema"""
+    occasion = fields.Str(allow_none=True, validate=validate.Length(max=50))
+    season = fields.Str(allow_none=True, validate=validate.Length(max=50))
+    style_preference = fields.Str(allow_none=True, validate=validate.Length(max=50))
+    weather = fields.Str(allow_none=True, validate=validate.Length(max=50))
+    temperature = fields.Float(allow_none=True)
+    exclude_clothes_ids = fields.List(fields.Int(), allow_none=True) 

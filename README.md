@@ -229,7 +229,7 @@ python main.py
   ```json
   {
     "gender": "female",  // 可选字段，可选值: male, female, other
-    "birth_date": "1992-05-15"  // 可选字段，格式: YYYY-MM-DD
+    "birth_date": "1992-05-15"  // 可选字段格式: YYYY-MM-DD
   }
   ```
 - **成功响应** (200):
@@ -704,6 +704,88 @@ python main.py
   {
     "success": false,
     "message": "穿搭不存在"
+  }
+  ```
+
+### AI穿搭推荐
+
+- **URL**: `/ai-cabinet/api/outfit/ai`
+- **方法**: POST
+- **认证**: 需要JWT令牌（在请求头中添加 `Authorization: Bearer <token>`）
+- **请求体**:
+  ```json
+  {
+    "occasion": "工作",          // 可选，场合
+    "season": "夏季",            // 可选，季节
+    "style_preference": "休闲",  // 可选，风格偏好
+    "weather": "晴天",           // 可选，天气
+    "temperature": 25,           // 可选，温度
+    "exclude_clothes_ids": [1, 2, 3]  // 可选，排除的衣物ID
+  }
+  ```
+- **成功响应** (200):
+  ```json
+  {
+    "success": true,
+    "result": {
+      "outfit": {
+        "id": 1,
+        "account_id": "550e8400-e29b-41d4-a716-446655440000",
+        "name": "清爽夏日工作装扮",
+        "description": "这套穿搭组合了浅色系的上衣和深色长裤，既符合工作环境的正式感，又能应对夏季炎热天气...",
+        "style": "商务休闲",
+        "season": "夏季",
+        "occasion": "工作",
+        "clothes_items": [11, 22, 33],
+        "image_url": null,
+        "created_at": "2023-06-01T08:30:00Z"
+      },
+      "clothes_detail": [
+        {
+          "id": 11,
+          "account_id": "550e8400-e29b-41d4-a716-446655440000",
+          "name": "白色棉麻衬衫",
+          "category": "上衣",
+          "color": "白色",
+          "season": ["spring", "summer"],
+          "style": "休闲",
+          "status": "available",
+          "image_url": "https://example.com/clothes/11.jpg",
+          "created_at": "2023-05-20T10:15:00Z"
+        },
+        {
+          "id": 22,
+          "account_id": "550e8400-e29b-41d4-a716-446655440000",
+          "name": "深蓝色西裤",
+          "category": "裤子",
+          "color": "深蓝色",
+          "season": ["spring", "summer", "autumn", "winter"],
+          "style": "正式",
+          "status": "available",
+          "image_url": "https://example.com/clothes/22.jpg",
+          "created_at": "2023-05-18T09:30:00Z"
+        },
+        {
+          "id": 33,
+          "account_id": "550e8400-e29b-41d4-a716-446655440000",
+          "name": "棕色皮鞋",
+          "category": "鞋子",
+          "color": "棕色",
+          "season": ["spring", "autumn", "winter"],
+          "style": "正式",
+          "status": "available",
+          "image_url": "https://example.com/clothes/33.jpg",
+          "created_at": "2023-05-15T14:20:00Z"
+        }
+      ]
+    }
+  }
+  ```
+- **错误响应** (200):
+  ```json
+  {
+    "success": false,
+    "message": "没有可用的衣物进行搭配"
   }
   ```
 

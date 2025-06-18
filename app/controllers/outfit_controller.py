@@ -3,7 +3,8 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from marshmallow import ValidationError
 
 from app.services.outfit_service import OutfitService
-from app.schemas.outfit import OutfitSchema, OutfitResponseSchema, OutfitFilterSchema
+from app.services.outfit_ai_service import OutfitAIService
+from app.schemas.outfit import OutfitSchema, OutfitResponseSchema, OutfitFilterSchema, OutfitAIRequestSchema
 from app.utils.response import success_response, error_response
 
 # 创建蓝图
@@ -13,6 +14,7 @@ outfit_bp = Blueprint('outfit', __name__)
 outfit_schema = OutfitSchema()
 outfit_response_schema = OutfitResponseSchema()
 outfit_filter_schema = OutfitFilterSchema()
+outfit_ai_schema = OutfitAIRequestSchema()
 
 @outfit_bp.route('', methods=['POST'])
 @jwt_required()
@@ -46,6 +48,53 @@ def create_outfit():
     result = outfit_response_schema.dump(outfit)
     
     return success_response(result)
+
+@outfit_bp.route('/ai', methods=['POST'])
+@jwt_required()
+def generate_ai_outfit():
+    """
+    AI穿搭推荐接口
+    :return: JSON响应
+    """
+    # 获取当前用户的account_id
+    account_id = get_jwt_identity()
+    
+    # 验证请求数据
+    try:
+        data = outfit_ai_schema.load(request.get_json() or {})
+    except ValidationError as err:
+        return error_response("验证错误", err.messages, 200)
+    
+    # 实例化AI服务
+    ai_service = OutfitAIService()
+    
+    # 生成穿搭推荐
+    result = ai_service.generate_outfit(
+        account_id=account_id,
+        occasion=data.get('occasion'),
+        season=data.get('season'),
+        style_preference=data.get('style_preference'),
+        weather=data.get('weather'),
+        temperature=data.get('temperature'),
+        exclude_clothes_ids=data.get('exclude_clothes_ids')
+    )
+    
+    if not result.get('success', False):
+        return error_response(result.get('message', 'AI穿搭推荐失败'), status_code=200)
+    
+    # 序列化响应数据
+    outfit = result.get('outfit')
+    outfit_data = outfit_response_schema.dump(outfit)
+    
+    # 获取衣物详情
+    clothes_detail = [cloth.to_dict() for cloth in outfit.get_clothes()]
+    
+    response_data = {
+        'outfit': outfit_data,
+        'clothes_detail': clothes_detail
+    }
+    
+    return success_response(response_data)
 
 @outfit_bp.route('', methods=['GET'])
 @jwt_required()
