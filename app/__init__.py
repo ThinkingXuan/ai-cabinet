@@ -45,6 +45,10 @@ def create_app(config_name='default'):
     from .controllers.outfit_controller import outfit_bp
     app.register_blueprint(outfit_bp, url_prefix='/ai-cabinet/api/outfit')
     
+    # 注册天气记录蓝图
+    from .controllers.weather_controller import weather_bp
+    app.register_blueprint(weather_bp, url_prefix='/ai-cabinet/api/weather')
+    
     # 注册全局错误处理
     register_error_handlers(app)
     

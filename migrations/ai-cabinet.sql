@@ -82,7 +82,9 @@ CREATE TABLE weather_logs (
     date DATE NOT NULL COMMENT '日期',
     location VARCHAR(100) COMMENT '位置（如城市名）',
     temperature DECIMAL(4,1) COMMENT '温度 °C',
-    condition VARCHAR(50) COMMENT '天气状况',
+    weather_condition VARCHAR(50) COMMENT '天气状况',
+    humidity DECIMAL(5,2) COMMENT '湿度',
+    wind_speed DECIMAL(5,2) COMMENT '风速',
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     INDEX (account_id)
 ) COMMENT='天气记录表';

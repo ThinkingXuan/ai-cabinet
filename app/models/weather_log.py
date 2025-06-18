@@ -9,17 +9,21 @@ class WeatherLog(db.Model):
     account_id = db.Column(db.String(64), nullable=False, index=True, comment='所属账号ID')
     date = db.Column(db.Date, nullable=False, comment='日期')
     location = db.Column(db.String(100), nullable=True, comment='位置')
-    temperature = db.Column(db.Numeric(5, 2), nullable=True, comment='温度')
-    weather_condition = db.Column(db.String(50), nullable=True, comment='天气情况')
-    humidity = db.Column(db.Integer, nullable=True, comment='湿度')
+    temperature = db.Column(db.Numeric(4, 1), nullable=True, comment='温度 °C')
+    weather_condition = db.Column(db.String(50), nullable=True, comment='天气状况')
+    humidity = db.Column(db.Numeric(5, 2), nullable=True, comment='湿度')
+    wind_speed = db.Column(db.Numeric(5, 2), nullable=True, comment='风速')
     created_at = db.Column(db.DateTime, default=datetime.utcnow, comment='创建时间')
 
-    def __init__(self, account_id, date, location=None, temperature=None, condition=None):
+    def __init__(self, account_id, date, location=None, temperature=None, weather_condition=None, 
+                 humidity=None, wind_speed=None):
         self.account_id = account_id
         self.date = date
         self.location = location
         self.temperature = temperature
-        self.condition = condition
+        self.weather_condition = weather_condition
+        self.humidity = humidity
+        self.wind_speed = wind_speed
     
     @classmethod
     def get_by_id(cls, weather_log_id):
@@ -76,6 +80,8 @@ class WeatherLog(db.Model):
             'date': self.date.isoformat(),
             'location': self.location,
             'temperature': float(self.temperature) if self.temperature is not None else None,
-            'condition': self.condition,
+            'weather_condition': self.weather_condition,
+            'humidity': float(self.humidity) if self.humidity is not None else None,
+            'wind_speed': float(self.wind_speed) if self.wind_speed is not None else None,
             'created_at': self.created_at.isoformat()
         } 

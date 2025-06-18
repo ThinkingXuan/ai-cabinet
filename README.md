@@ -789,6 +789,50 @@ python main.py
   }
   ```
 
+### 创建/更新天气记录
+
+- **URL**: `/ai-cabinet/api/weather`
+- **方法**: POST
+- **认证**: 需要JWT令牌（在请求头中添加 `Authorization: Bearer <token>`）
+- **请求体**:
+  ```json
+  {
+    "date": "2023-07-15",       // 必填，日期，格式为YYYY-MM-DD
+    "location": "北京",          // 可选，位置
+    "temperature": 28.5,         // 可选，温度（°C）
+    "weather_condition": "晴",   // 可选，天气状况
+    "humidity": 65.5,            // 可选，湿度
+    "wind_speed": 3.2            // 可选，风速
+  }
+  ```
+- **成功响应** (200):
+  ```json
+  {
+    "success": true,
+    "result": {
+      "id": 1,
+      "account_id": "550e8400-e29b-41d4-a716-446655440000",
+      "date": "2023-07-15",
+      "location": "北京",
+      "temperature": 28.5,
+      "weather_condition": "晴",
+      "humidity": 65.5,
+      "wind_speed": 3.2,
+      "created_at": "2023-07-15T08:30:00Z"
+    }
+  }
+  ```
+- **错误响应** (200):
+  ```json
+  {
+    "success": false,
+    "message": "验证错误",
+    "errors": {
+      "date": ["日期不能是未来日期"]
+    }
+  }
+  ```
+
 ### 上传衣物图片
 
 - **URL**: `/ai-cabinet/api/clothes/upload`
