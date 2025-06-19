@@ -54,6 +54,12 @@ def create_outfit():
 def generate_ai_outfit():
     """
     AI穿搭推荐接口
+    
+    如果请求中未提供季节、天气或温度参数，将自动从天气数据库中获取：
+    - 季节：根据当前日期自动计算（3-5月为春季，6-8月为夏季，9-11月为秋季，12-2月为冬季）
+    - 天气：从当天的天气记录中获取
+    - 温度：从当天的天气记录中获取
+    
     :return: JSON响应
     """
     # 获取当前用户的account_id
@@ -69,6 +75,7 @@ def generate_ai_outfit():
     ai_service = OutfitAIService()
     
     # 生成穿搭推荐
+    # 注意：如果未提供季节、天气或温度参数，服务将自动从天气数据库获取
     result = ai_service.generate_outfit(
         account_id=account_id,
         occasion=data.get('occasion'),

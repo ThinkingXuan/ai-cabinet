@@ -3,11 +3,13 @@ AI穿搭推荐服务
 """
 import json
 import random
+from datetime import datetime
 from openai import OpenAI
 from config import Config
 from app import db
 from app.models.clothes import Clothes
 from app.models.outfit import Outfit
+from app.services.weather_service import WeatherService
 
 class OutfitAIService:
     """AI穿搭推荐服务类"""
@@ -37,6 +39,21 @@ class OutfitAIService:
         :param exclude_clothes_ids: 排除的衣物ID列表
         :return: 生成的穿搭对象或错误信息
         """
+        # 从天气数据库获取当前天气和季节信息
+        weather_info = WeatherService.get_current_weather(account_id)
+        
+        # 如果没有传入季节参数，则使用当前季节
+        if not season:
+            season = weather_info.get('season')
+        
+        # 如果没有传入天气参数，则使用当前天气
+        if not weather:
+            weather = weather_info.get('weather')
+        
+        # 如果没有传入温度参数，则使用当前温度
+        if temperature is None:
+            temperature = weather_info.get('temperature')
+        
         # 获取用户可用的衣物
         available_clothes = self._get_available_clothes(account_id, exclude_clothes_ids)
         
@@ -91,8 +108,8 @@ class OutfitAIService:
             occasion=occasion or outfit_data.get("occasion")
         )
         
-        db.session.add(outfit)
-        db.session.commit()
+        # db.session.add(outfit)
+        # db.session.commit()
         
         return {"success": True, "outfit": outfit}
     

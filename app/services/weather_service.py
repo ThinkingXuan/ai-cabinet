@@ -141,4 +141,71 @@ class WeatherService:
         db.session.delete(weather)
         db.session.commit()
         
-        return True 
+        return True
+
+    @staticmethod
+    def get_current_weather(account_id):
+        """
+        获取当前天气信息
+        :param account_id: 账号ID
+        :return: 天气信息字典
+        """
+        # 获取今天的日期
+        today = datetime.now().date()
+        
+        # 查询今天的天气记录
+        weather_log = WeatherLog.get_by_date(account_id, today)
+        
+        if weather_log:
+            return {
+                'weather': weather_log.weather_condition,
+                'temperature': float(weather_log.temperature) if weather_log.temperature is not None else None,
+                'season': WeatherService.get_season_by_date(today)
+            }
+        
+        # 如果没有记录，返回默认值
+        return {
+            'weather': None,
+            'temperature': None,
+            'season': WeatherService.get_season_by_date(today)
+        }
+    
+    @staticmethod
+    def get_season_by_date(date=None):
+        """
+        根据日期计算季节
+        :param date: 日期，默认为当前日期
+        :return: 季节名称（春、夏、秋、冬）
+        """
+        if date is None:
+            date = datetime.now().date()
+        
+        # 获取月份
+        month = date.month
+        
+        # 根据月份判断季节
+        if 3 <= month <= 5:
+            return '春季'
+        elif 6 <= month <= 8:
+            return '夏季'
+        elif 9 <= month <= 11:
+            return '秋季'
+        else:  # 12, 1, 2
+            return '冬季'
+    
+    @staticmethod
+    def get_latest_weather(account_id, days=7):
+        """
+        获取最近几天的天气记录
+        :param account_id: 账号ID
+        :param days: 天数，默认7天
+        :return: 天气记录列表
+        """
+        # 获取最近的天气记录
+        weather_logs = db.session.query(WeatherLog)\
+            .filter_by(account_id=account_id)\
+            .order_by(WeatherLog.date.desc())\
+            .limit(days)\
+            .all()
+        
+        return [log.to_dict() for log in weather_logs] 
