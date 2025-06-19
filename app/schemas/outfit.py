@@ -22,6 +22,7 @@ class OutfitResponseSchema(Schema):
     account_id = fields.Str(dump_only=True)
     name = fields.Str()
     clothes_items = fields.Method('get_clothes_items')
+    clothes_details = fields.Method('get_clothes_details')
     image_url = fields.Str(allow_none=True)
     description = fields.Str(allow_none=True)
     style = fields.Str(allow_none=True)
@@ -32,6 +33,11 @@ class OutfitResponseSchema(Schema):
     def get_clothes_items(self, obj):
         """获取衣物ID列表"""
         return obj.get_clothes_items()
+    
+    def get_clothes_details(self, obj):
+        """获取衣物详细信息列表"""
+        clothes_list = obj.get_clothes()
+        return [clothes.to_dict() for clothes in clothes_list]
 
 class OutfitFilterSchema(Schema):
     """穿搭过滤的schema"""

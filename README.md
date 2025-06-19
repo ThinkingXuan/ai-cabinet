@@ -629,6 +629,44 @@ python main.py
         "account_id": "550e8400-e29b-41d4-a716-446655440000",
         "name": "休闲穿搭",
         "clothes_items": [1, 2, 3],
+        "clothes_details": [
+          {
+            "id": 1,
+            "account_id": "550e8400-e29b-41d4-a716-446655440000",
+            "name": "白色T恤",
+            "category": "上衣",
+            "color": "白色",
+            "season": ["spring", "summer"],
+            "style": "休闲",
+            "status": "available",
+            "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/clothes/user123/20230601/abc123.jpg",
+            "created_at": "2023-05-20T10:15:00Z"
+          },
+          {
+            "id": 2,
+            "account_id": "550e8400-e29b-41d4-a716-446655440000",
+            "name": "蓝色牛仔裤",
+            "category": "裤子",
+            "color": "蓝色",
+            "season": ["spring", "summer", "autumn"],
+            "style": "休闲",
+            "status": "available",
+            "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/clothes/user123/20230601/def456.jpg",
+            "created_at": "2023-05-18T09:30:00Z"
+          },
+          {
+            "id": 3,
+            "account_id": "550e8400-e29b-41d4-a716-446655440000",
+            "name": "白色运动鞋",
+            "category": "鞋子",
+            "color": "白色",
+            "season": ["spring", "summer", "autumn"],
+            "style": "休闲",
+            "status": "available",
+            "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/clothes/user123/20230601/ghi789.jpg",
+            "created_at": "2023-05-15T14:20:00Z"
+          }
+        ],
         "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/outfits/user123/outfit1.jpg",
         "description": "适合周末逛街的休闲穿搭",
         "style": "休闲",
@@ -641,6 +679,44 @@ python main.py
         "account_id": "550e8400-e29b-41d4-a716-446655440000",
         "name": "正式场合穿搭",
         "clothes_items": [4, 5, 6],
+        "clothes_details": [
+          {
+            "id": 4,
+            "account_id": "550e8400-e29b-41d4-a716-446655440000",
+            "name": "白色衬衫",
+            "category": "上衣",
+            "color": "白色",
+            "season": ["spring", "summer", "autumn", "winter"],
+            "style": "正式",
+            "status": "available",
+            "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/clothes/user123/20230602/jkl012.jpg",
+            "created_at": "2023-05-22T11:15:00Z"
+          },
+          {
+            "id": 5,
+            "account_id": "550e8400-e29b-41d4-a716-446655440000",
+            "name": "黑色西裤",
+            "category": "裤子",
+            "color": "黑色",
+            "season": ["spring", "autumn", "winter"],
+            "style": "正式",
+            "status": "available",
+            "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/clothes/user123/20230602/mno345.jpg",
+            "created_at": "2023-05-21T10:30:00Z"
+          },
+          {
+            "id": 6,
+            "account_id": "550e8400-e29b-41d4-a716-446655440000",
+            "name": "黑色皮鞋",
+            "category": "鞋子",
+            "color": "黑色",
+            "season": ["spring", "autumn", "winter"],
+            "style": "正式",
+            "status": "available",
+            "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/clothes/user123/20230602/pqr678.jpg",
+            "created_at": "2023-05-20T15:45:00Z"
+          }
+        ],
         "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/outfits/user123/outfit2.jpg",
         "description": "适合工作场合的正式穿搭",
         "style": "正式",
@@ -666,6 +742,44 @@ python main.py
       "account_id": "550e8400-e29b-41d4-a716-446655440000",
       "name": "休闲穿搭",
       "clothes_items": [1, 2, 3],
+      "clothes_details": [
+        {
+          "id": 1,
+          "account_id": "550e8400-e29b-41d4-a716-446655440000",
+          "name": "白色T恤",
+          "category": "上衣",
+          "color": "白色",
+          "season": ["spring", "summer"],
+          "style": "休闲",
+          "status": "available",
+          "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/clothes/user123/20230601/abc123.jpg",
+          "created_at": "2023-05-20T10:15:00Z"
+        },
+        {
+          "id": 2,
+          "account_id": "550e8400-e29b-41d4-a716-446655440000",
+          "name": "蓝色牛仔裤",
+          "category": "裤子",
+          "color": "蓝色",
+          "season": ["spring", "summer", "autumn"],
+          "style": "休闲",
+          "status": "available",
+          "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/clothes/user123/20230601/def456.jpg",
+          "created_at": "2023-05-18T09:30:00Z"
+        },
+        {
+          "id": 3,
+          "account_id": "550e8400-e29b-41d4-a716-446655440000",
+          "name": "白色运动鞋",
+          "category": "鞋子",
+          "color": "白色",
+          "season": ["spring", "summer", "autumn"],
+          "style": "休闲",
+          "status": "available",
+          "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/clothes/user123/20230601/ghi789.jpg",
+          "created_at": "2023-05-15T14:20:00Z"
+        }
+      ],
       "image_url": "https://ai-cabinet.oss-cn-hangzhou.aliyuncs.com/outfits/user123/outfit1.jpg",
       "description": "适合周末逛街的休闲穿搭",
       "style": "休闲",
