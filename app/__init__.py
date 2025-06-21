@@ -64,7 +64,7 @@ def register_jwt_handlers(jwt):
     @jwt.expired_token_loader
     def expired_token_callback(jwt_header, jwt_payload):
         """处理令牌过期的情况"""
-        return error_response("令牌已过期，请重新登录", status_code=200)
+        return error_response("令牌已过期，请重新登录", status_code=302)
     
     @jwt.invalid_token_loader
     def invalid_token_callback(error_string):
